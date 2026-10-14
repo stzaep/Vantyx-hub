@@ -1,0 +1,29 @@
+{
+  "name": "vantyx-hub",
+  "productName": "Vantyx Hub",
+  "version": "0.1.1",
+  "description": "Vantyx Hub - install and manage Vantyx tools for Adobe After Effects",
+  "author": "Vantyx",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "src/main/main.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "pack:dir": "electron-builder --win --dir",
+    "dist": "electron-builder --win nsis --publish never",
+    "dist:portable": "electron-builder --win portable --publish never",
+    "check:release": "node scripts/check-release.js",
+    "release": "node scripts/check-release.js && electron-builder --win nsis --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}

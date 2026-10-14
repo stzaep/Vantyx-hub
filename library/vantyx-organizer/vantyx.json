@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "vantyx-organizer",
+  "name": "Vantyx Organizer",
+  "version": "1.0.0",
+  "kind": "cep",
+  "description": "Organizes the After Effects Project panel: scans, previews and applies folder structures and naming rules.",
+  "author": "Vantyx",
+  "payload": "payload",
+  "installDir": "VantyxOrganizer",
+  "userData": ["%APPDATA%/VantyxOrganizer"],
+  "cep": { "requiresDebugMode": true },
+  "requires": { "ae": ">=2020" }
+}

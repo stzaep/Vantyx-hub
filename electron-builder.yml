@@ -1,0 +1,53 @@
+appId: com.vantyx.hub
+productName: Vantyx Hub
+copyright: Copyright (c) Vantyx
+directories:
+  output: dist
+  buildResources: build
+files:
+  - src/**/*
+  - package.json
+extraResources:
+  - from: library
+    to: library
+
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+  # Code signing: not configured (no certificate yet). See docs/RELEASING.md,
+  # section "Firma digital", to add one without changing anything else.
+
+nsis:
+  # Assisted installer: the user can choose the install folder.
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  # Per-user install (no administrator rights). This is also what lets the
+  # in-app updater replace the app silently without a UAC prompt.
+  perMachine: false
+  allowElevation: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Vantyx Hub
+  uninstallDisplayName: Vantyx Hub
+  runAfterFinish: true
+  # Keep %APPDATA%\Vantyx Hub (settings, install receipts) when uninstalling.
+  # Tools installed in After Effects (%APPDATA%\Adobe\CEP\extensions) live
+  # outside the app folder and are never touched by the uninstaller.
+  deleteAppDataOnUninstall: false
+  differentialPackage: true
+  # No spaces: GitHub renames assets with spaces, which breaks latest.yml.
+  artifactName: Vantyx-Hub-Setup-${version}.${ext}
+
+portable:
+  artifactName: Vantyx-Hub-Portable-${version}.${ext}
+
+# Update feed: GitHub Releases of stzaep/Vantyx-hub (see docs/RELEASING.md).
+# With YOUR_* placeholders the app would report "update source not configured"
+# instead of trying to reach a server.
+publish:
+  provider: github
+  owner: stzaep
+  repo: Vantyx-hub
+  releaseType: release

@@ -1,0 +1,42 @@
+name: Release Vantyx Hub
+
+# Publish: push a tag that matches package.json, e.g.  git tag v0.2.0 && git push origin v0.2.0
+# Test build only (nothing published): run this workflow manually from the Actions tab.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # lets GITHUB_TOKEN (provided by GitHub, not a secret you create) upload release files
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm test
+
+      # Tag push -> build the installer AND publish it with latest.yml to GitHub Releases.
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: npm run release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Manual run -> build only, keep files as a downloadable artifact.
+      - name: Build only
+        if: "!startsWith(github.ref, 'refs/tags/v')"
+        run: npm run dist
+      - uses: actions/upload-artifact@v4
+        if: "!startsWith(github.ref, 'refs/tags/v')"
+        with:
+          name: VantyxHub-installer
+          path: |
+            dist/*.exe
+            dist/latest.yml
+            dist/*.blockmap

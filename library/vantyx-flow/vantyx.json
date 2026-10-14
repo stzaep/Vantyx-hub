@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "vantyx-flow",
+  "name": "Vantyx Flow",
+  "version": "1.1.0",
+  "kind": "cep",
+  "description": "Animation flow panel for After Effects: apply easing and motion presets to selected keyframes.",
+  "author": "Vantyx",
+  "payload": "payload",
+  "installDir": "VantyxFLow",
+  "userData": [],
+  "cep": { "requiresDebugMode": true },
+  "requires": { "ae": ">=2018" }
+}

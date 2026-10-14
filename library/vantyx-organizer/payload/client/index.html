@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vantyx Organizer</title>
+    <link rel="stylesheet" type="text/css" href="css/vtx-style.css" />
+</head>
+<body>
+
+    <!-- ===================== VISTA PRINCIPAL ===================== -->
+    <section id="viewMain" class="view">
+        <header class="app-header">
+            <div class="header-left">
+                <img src="assets/logo.png" alt="Logo" class="app-logo-img" />
+                <div class="header-title-box">
+                    <h1>VANTYX ORGANIZER</h1>
+                    <span class="header-subtitle">PROJECT · AUTO ORGANIZE</span>
+                </div>
+            </div>
+            <button class="btn-icon" id="btnSettings" title="Settings">⚙</button>
+        </header>
+
+        <div class="category-header collapsible-toggle" data-panel="organizer">
+            <span class="category-header-label">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Organize Project
+            </span>
+            <span class="chevron">▼</span>
+        </div>
+
+        <div class="panel-content" id="organizerPanelContent">
+            <div class="block-title">Preset</div>
+            <div class="kit-action-row">
+                <div class="select-wrapper">
+                    <select id="presetSelect" class="vtx-select"></select>
+                </div>
+            </div>
+
+            <div class="block-title" id="activeRulesTitle">Active folders</div>
+            <div class="chips-container" id="activeRules"></div>
+
+            <button class="primary-btn" id="btnOrganize">ORGANIZE PROJECT</button>
+            <button class="full-width-btn btn-gap" id="btnPreview">Preview changes</button>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="category-header collapsible-toggle" data-panel="result">
+            <span class="category-header-label">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Last Result
+            </span>
+            <span class="chevron">▼</span>
+        </div>
+
+        <div class="panel-content" id="resultPanelContent">
+            <div class="result-card" id="resultBody"><div class="result-empty">Nothing organized yet.</div></div>
+        </div>
+
+        <div id="statusBar" class="status-bar">Ready</div>
+    </section>
+
+    <!-- ===================== VISTA DE AJUSTES ===================== -->
+    <section id="viewSettings" class="view is-hidden">
+        <header class="app-header">
+            <div class="header-left">
+                <button class="btn-icon" id="btnBack" title="Back">←</button>
+                <div class="header-title-box">
+                    <h1>SETTINGS</h1>
+                    <span class="header-subtitle" id="settingsSubtitle">PRESET</span>
+                </div>
+            </div>
+        </header>
+        <div id="settingsBody"></div>
+    </section>
+
+    <script src="js/vtx-CSInterface.js"></script>
+    <script src="js/vtx-defaults.js"></script>
+    <script src="js/vtx-classifier.js"></script>
+    <script src="js/vtx-state.js"></script>
+    <script src="js/vtx-host.js"></script>
+    <script src="js/vtx-storage.js"></script>
+    <script src="js/vtx-ui-common.js"></script>
+    <script src="js/vtx-dialogs.js"></script>
+    <script src="js/vtx-ui-main.js"></script>
+    <script src="js/vtx-ui-settings.js"></script>
+    <script src="js/vtx-app.js"></script>
+</body>
+</html>

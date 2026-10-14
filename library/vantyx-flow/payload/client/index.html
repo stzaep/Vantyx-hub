@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vantyx Flow</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-left">
+            <img src="assets/logo.png" alt="Logo" class="app-logo-img" />
+            <div class="header-title-box">
+                <h1>VANTYX FLOW</h1>
+                <span class="header-subtitle">KEYFRAME EASING TOOLKIT</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="curve-editor-card">
+            <div class="editor-mode-tabs" id="editorModeTabs">
+                <button class="editor-mode-tab active" id="tabCurveBtn" type="button" data-mode="curve">Curve</button>
+                <button class="editor-mode-tab" id="tabBounceBtn" type="button" data-mode="bounce">Bounce</button>
+            </div>
+
+            <div class="editor-mode-panel" id="curveModePanel">
+                <div class="curve-editor-canvas-wrap" id="curveEditorCanvasWrap">
+                    <svg id="curveEditorSvg" viewBox="0 0 100 100" class="curve-editor-svg" preserveAspectRatio="none">
+                        <defs>
+                            <pattern id="curveGridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" class="curve-grid-line"></path>
+                            </pattern>
+                        </defs>
+                        <rect x="0" y="0" width="100" height="100" fill="url(#curveGridPattern)"></rect>
+                        <rect id="curveBoundsRect" class="curve-bounds-rect" x="0" y="0" width="100" height="100"></rect>
+                        <line x1="0" y1="100" x2="100" y2="0" class="curve-diag-line"></line>
+                        <line id="handle1Guide" x1="0" y1="100" x2="25" y2="90" class="curve-guide-line"></line>
+                        <line id="handle2Guide" x1="100" y1="0" x2="75" y2="10" class="curve-guide-line"></line>
+                        <path id="curveEditorPath" class="curve-editor-path" d=""></path>
+                        <circle id="handle1" class="curve-handle handle-1" cx="25" cy="90" r="2.8"></circle>
+                        <circle id="handle2" class="curve-handle handle-2" cx="75" cy="10" r="2.8"></circle>
+                    </svg>
+                    <div class="curve-resize-handle" id="curveResizeHandle" title="Drag to resize the curve editor">◢</div>
+                </div>
+
+                <div class="context-menu" id="curveContextMenu" hidden>
+                    <button class="context-menu-item" id="btnReverseCurve" type="button">Reverse value</button>
+                </div>
+
+                <div class="curve-values-row" id="curveValuesRow">
+                    <input type="text" id="curveValuesInput" class="curve-value-input" title="x1, y1, x2, y2" inputmode="decimal">
+                </div>
+
+                <div class="curve-actions-row">
+                    <button class="btn-icon-sm" id="btnReadCurve" title="Read curve from selected keyframes">⤓</button>
+                    <button class="btn-icon-sm" id="btnPrevPreset" title="Previous curve">◀</button>
+                    <button class="btn-icon-sm" id="btnFavCurve" title="Save current curve into the active group">★</button>
+                    <button class="btn-icon-sm" id="btnNextPreset" title="Next curve">▶</button>
+                    <button id="btnApplyCurve" class="full-width-btn apply-btn">APPLY</button>
+                </div>
+            </div>
+
+            <div class="editor-mode-panel" id="bounceModePanel" hidden>
+                <div class="curve-editor-canvas-wrap">
+                    <svg id="bounceGraphSvg" viewBox="0 0 100 100" class="curve-editor-svg bounce-graph-svg" preserveAspectRatio="none">
+                        <defs>
+                            <pattern id="bounceGridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" class="curve-grid-line"></path>
+                            </pattern>
+                        </defs>
+                        <rect x="0" y="0" width="100" height="100" fill="url(#bounceGridPattern)"></rect>
+                        <line id="bounceBaselineLine" x1="0" y1="90" x2="100" y2="90" class="bounce-baseline-line"></line>
+                        <path id="bounceGraphPath" class="bounce-graph-path" d=""></path>
+                        <circle id="bounceLandingDot" class="bounce-graph-dot" cx="4" cy="90" r="2.2"></circle>
+                        <circle id="bounceEndDot" class="bounce-graph-dot" cx="96" cy="90" r="2.2"></circle>
+                    </svg>
+                </div>
+
+                <div class="bounce-params">
+                    <div class="bounce-param-row">
+                        <span class="bounce-param-label">Bounces</span>
+                        <input type="range" id="bounceBouncesSlider" min="1" max="8" step="1" value="4" />
+                        <input type="number" class="bounce-param-value-input" id="bounceBouncesValueInput" min="1" max="8" step="1" value="4" inputmode="numeric">
+                    </div>
+                    <div class="bounce-param-row">
+                        <span class="bounce-param-label">Decay</span>
+                        <input type="range" id="bounceDecaySlider" min="0" max="0.90" step="0.05" value="0.50" />
+                        <input type="number" class="bounce-param-value-input" id="bounceDecayValueInput" min="0" max="0.90" step="0.05" value="0.50" inputmode="decimal">
+                    </div>
+                </div>
+
+                <button id="btnApplyBounce" class="full-width-btn apply-btn">APPLY BOUNCE</button>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="category-header">
+            <span class="category-header-label">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 17 C 8 17, 8 7, 12 7 C 16 7, 16 17, 21 17"></path>
+                </svg>
+                Curves
+            </span>
+            <div class="size-control" title="Resize curve cards">
+                <span class="size-icon">－</span>
+                <input type="range" id="presetSizeSlider" min="60" max="140" value="84" />
+                <span class="size-icon">＋</span>
+            </div>
+        </div>
+
+        <div class="library-toolbar">
+            <div class="group-select-wrap">
+                <select id="groupSelect" class="group-select"></select>
+            </div>
+            <button class="btn-icon-sm" id="btnAddGroup" title="New group">＋</button>
+            <button class="btn-icon-sm" id="btnRenameGroup" title="Rename current group">✎</button>
+            <button class="btn-icon-sm" id="btnDeleteGroup" title="Delete current group">🗑</button>
+        </div>
+
+        <div class="ease-grid" id="curvesGrid"></div>
+
+        <div class="library-io-row">
+            <button class="full-width-btn" id="btnImportLibrary">IMPORT</button>
+            <button class="full-width-btn" id="btnExportLibrary">EXPORT</button>
+        </div>
+
+    </main>
+
+    <script src="js/CSInterface.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

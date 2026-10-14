@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vantyx Hub</title>
+    <link rel="stylesheet" href="css/vtx-theme.css">
+</head>
+<body>
+    <div id="titlebar"><img class="tb-logo" src="assets/logo.png" alt=""><span>VANTYX HUB</span></div>
+
+    <main id="app">
+        <header class="app-header">
+            <div class="header-left">
+                <img class="app-logo-img" src="assets/logo.png" alt="">
+                <div class="header-title-box">
+                    <h1>VANTYX HUB</h1>
+                    <div class="header-subtitle" id="subtitle"></div>
+                </div>
+            </div>
+            <button id="btnRefresh" class="btn-icon" title="Refresh">&#8635;</button>
+        </header>
+
+        <section id="env" class="env-card"></section>
+
+        <section id="updates" class="update-card" hidden></section>
+
+        <div class="section-title-row"><span class="section-title" id="libTitle"></span></div>
+        <div id="warnings"></div>
+        <section id="tools"></section>
+    </main>
+
+    <div id="toasts"></div>
+    <div id="modal-root"></div>
+
+    <script src="js/strings.js"></script>
+    <script src="js/logic.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

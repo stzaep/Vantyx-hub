@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vantyx Studio</title>
+    <link rel="stylesheet" type="text/css" href="css/vtx-style.css" />
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-left">
+            <img src="assets/logo.png" alt="Logo" class="app-logo-img" />
+            <div class="header-title-box">
+                <h1>VANTYX STUDIO</h1>
+                <span class="header-subtitle">KITS · STUDIO TOOLKIT</span>
+            </div>
+        </div>
+        <button class="btn-icon" id="btnSettings" title="Settings">⚙</button>
+    </header>
+
+    <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-modal">
+            <div class="settings-modal-header">
+                <span>Settings</span>
+                <button class="btn-icon-sm" id="btnCloseSettings" title="Close">✕</button>
+            </div>
+            <div class="settings-section">
+                <div class="block-title">Theme</div>
+                <div class="theme-toggle-row">
+                    <button class="theme-option-btn" id="btnThemeDark" data-theme="dark">🌙 Dark</button>
+                    <button class="theme-option-btn" id="btnThemeLight" data-theme="light">☀ Light</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="category-header collapsible-toggle" data-panel="kits">
+            <span class="category-header-label">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                </svg>
+                Vantyx Kits
+            </span>
+            <span class="chevron">▼</span>
+        </div>
+
+        <div class="collapsible-content" id="kitsPanelContent">
+            <div class="kit-action-row">
+                <div class="select-wrapper">
+                    <select id="kitSelect"></select>
+                </div>
+                <button class="btn-icon" id="btnNewKit" title="New Kit">+</button>
+                <button class="btn-icon" id="btnRenameKit" title="Rename Kit">✏</button>
+                <button class="btn-icon" id="btnDeleteKit" title="Delete Kit">🗑</button>
+            </div>
+
+            <div class="section-title-row">
+                <span class="section-title" id="currentKitTitle">My First Kit</span>
+                <div class="title-actions">
+                    <button class="btn-icon-sm" id="btnAddColor" title="Add Color">+</button>
+                    <button class="btn-icon-sm" id="btnRemoveColor" title="Remove Color">−</button>
+                </div>
+            </div>
+
+            <div class="swatches-container" id="swatchesContainer"></div>
+
+            <div class="block-title">Kit Colors</div>
+
+            <div class="color-control-card">
+                <div class="card-header">
+                    <span class="card-title" id="selectedSwatchLabel">Manual Color</span>
+                    <span class="hex-value" id="hexDisplay">#FFFFFF</span>
+                </div>
+                <div class="card-controls">
+                    <div class="picker-input-group">
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="manualColorPicker" value="#ffffff" />
+                        </div>
+                        <input type="text" id="hexInput" class="hex-text-input" value="#FFFFFF" maxlength="7" />
+                    </div>
+                    <button id="btnEyedropper" class="pill-btn">from selection</button>
+                </div>
+            </div>
+
+            <button id="btnPullLayers" class="full-width-btn">Pull colors from selected layers</button>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="category-header collapsible-toggle" data-panel="fonts">
+            <span class="category-header-label">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                    <line x1="9" y1="20" x2="15" y2="20"></line>
+                    <line x1="12" y1="4" x2="12" y2="20"></line>
+                </svg>
+                Vantyx Fonts
+            </span>
+            <span class="chevron">▼</span>
+        </div>
+
+        <div class="collapsible-content" id="fontsPanelContent">
+            <div class="section-title-row">
+                <span class="section-title">Saved Fonts</span>
+                <div class="title-actions">
+                    <button class="btn-icon-sm" id="btnAddFont" title="Save font from selected text layer">+</button>
+                </div>
+            </div>
+
+            <div class="fonts-list" id="fontsListContainer"></div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="category-header collapsible-toggle" data-panel="logo">
+            <span class="category-header-label">
+                <img src="assets/logo.png" alt="Vantyx" class="category-icon category-icon-logo" />
+                Vantyx Logo
+            </span>
+            <span class="chevron">▼</span>
+        </div>
+
+        <div class="collapsible-content" id="logoPanelContent">
+            <div class="section-title-row">
+                <span class="section-title">Saved Media</span>
+                <div class="title-actions">
+                    <button class="btn-icon-sm" id="btnAddMedia" title="Import images or videos">+</button>
+                </div>
+            </div>
+
+            <div class="logo-grid" id="logoListContainer"></div>
+        </div>
+
+        <div id="statusBar" class="status-bar">Ready</div>
+    </main>
+
+    <script src="js/vtx-CSInterface.js"></script>
+    <script src="js/vtx-main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "vantyx-studio",
+  "name": "Vantyx Studio",
+  "version": "1.0.0",
+  "kind": "cep",
+  "description": "Media and logo toolkit for After Effects: import images and videos with real thumbnails and place them in the active comp.",
+  "author": "Vantyx",
+  "payload": "payload",
+  "installDir": "VantyxStudio",
+  "userData": ["%APPDATA%/VantyxStudio"],
+  "cep": { "requiresDebugMode": true },
+  "requires": { "ae": ">=2018" }
+}
