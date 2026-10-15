@@ -10,7 +10,8 @@ files:
 extraResources:
   - from: library
     to: library
-
+  - from: build/icon.ico
+    to: icon.ico
 win:
   icon: build/icon.ico
   target:
