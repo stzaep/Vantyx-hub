@@ -84,6 +84,7 @@ if (!app.requestSingleInstanceLock()) {
 } else {
     let win = null;
     let tray = null;
+    let discordPresence = null;
     let isQuitting = false;
 
     const iconPath = app.isPackaged
@@ -229,7 +230,7 @@ if (!app.requestSingleInstanceLock()) {
             isBusy: ipc.isBusy
         });
 
-        const discordPresence = createDiscordPresence();
+        discordPresence = createDiscordPresence();
 
         registerUpdatesIpc({
             ipcMain,
