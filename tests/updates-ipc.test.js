@@ -35,7 +35,7 @@ test('exactly the expected IPC channels are registered', () => {
     try {
         const { handlers } = setup(root);
         assert.deepStrictEqual([...handlers.keys()].sort(),
-            ['settings:get', 'settings:set', 'updates:check', 'updates:download', 'updates:get-state', 'updates:install']);
+            ['discord:set-enabled', 'settings:get', 'settings:set', 'updates:check', 'updates:download', 'updates:get-state', 'updates:install']);
     } finally { rmrf(root); }
 });
 
@@ -102,14 +102,14 @@ test('settings:set validates keys and types; settings:get returns the saved valu
     const root = tmp();
     try {
         const { call } = setup(root);
-        assert.deepStrictEqual((await call('settings:get')).data, { autoCheckUpdates: true });
+        assert.deepStrictEqual((await call('settings:get')).data, { autoCheckUpdates: true, discordRichPresence: false });
         for (const bad of [undefined, null, [], 'x', {}, { evil: 1 }, { autoCheckUpdates: 'no' }, { autoCheckUpdates: false, extra: 1 }, { constructor: 1 }]) {
             const r = await call('settings:set', bad);
             assert.strictEqual(r.ok, false, JSON.stringify(bad));
             assert.strictEqual(r.error.code, 'BAD_REQUEST');
         }
         assert.strictEqual((await call('settings:get')).data.autoCheckUpdates, true);
-        assert.deepStrictEqual((await call('settings:set', { autoCheckUpdates: false })).data, { autoCheckUpdates: false });
+        assert.deepStrictEqual((await call('settings:set', { autoCheckUpdates: false, discordRichPresence: false })).data, { autoCheckUpdates: false, discordRichPresence: false });
         assert.strictEqual((await call('settings:get')).data.autoCheckUpdates, false);
     } finally { rmrf(root); }
 });
@@ -127,13 +127,13 @@ test('preload exposes only the update/settings API and never leaks ipcRenderer',
     const src = fs.readFileSync(path.join(__dirname, '..', 'src', 'main', 'preload.js'), 'utf8');
     vm.runInNewContext(src, { require: m => { assert.strictEqual(m, 'electron'); return fakeElectron; } });
 
-    assert.deepStrictEqual(Object.keys(exposed).sort(), ['hub', 'settings', 'updates']);
+    assert.deepStrictEqual(Object.keys(exposed).sort(), ['discord', 'hub', 'settings', 'updates']);
     assert.deepStrictEqual(Object.keys(exposed.updates).sort(), ['check', 'download', 'getState', 'installAndRestart', 'onState']);
     assert.deepStrictEqual(Object.keys(exposed.settings).sort(), ['get', 'set']);
 
     await exposed.updates.installAndRestart('ignored', 'args');
     assert.deepStrictEqual(JSON.parse(JSON.stringify(invoked[0])), ['updates:install', { confirmed: true }]);  // JSON: objects come from another vm realm
-    await exposed.updates.check(); await exposed.settings.set({ autoCheckUpdates: false });
+    await exposed.updates.check(); await exposed.settings.set({ autoCheckUpdates: false, discordRichPresence: false });
     assert.deepStrictEqual(invoked.slice(1).map(a => a[0]), ['updates:check', 'settings:set']);
 
     // listener receives only the state, never the IPC event object; unsubscribe works

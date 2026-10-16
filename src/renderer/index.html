@@ -19,17 +19,26 @@
                     <div class="header-subtitle" id="subtitle"></div>
                 </div>
             </div>
-            <button id="btnRefresh" class="btn-icon" title="Refresh">&#8635;</button>
+            <button id="btnSettings" class="btn-icon" type="button" title="Ajustes" aria-label="Abrir ajustes">&#9881;</button>
+            <button id="btnRefresh" class="btn-icon" type="button" title="Refresh" aria-hidden="true" tabindex="-1" hidden>&#8635;</button>
         </header>
 
         <section id="env" class="env-card"></section>
-
         <section id="updates" class="update-card" hidden></section>
-
         <div class="section-title-row"><span class="section-title" id="libTitle"></span></div>
         <div id="warnings"></div>
         <section id="tools"></section>
     </main>
+
+    <div id="settings-overlay" class="settings-overlay" hidden>
+        <section class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+            <div class="settings-panel-head">
+                <h2 id="settings-title">Configuración</h2>
+                <button id="btnCloseSettings" class="btn-icon" type="button" title="Cerrar ajustes" aria-label="Cerrar ajustes">&times;</button>
+            </div>
+            <section id="discord-settings" class="update-card" hidden></section>
+        </section>
+    </div>
 
     <div id="toasts"></div>
     <div id="modal-root"></div>

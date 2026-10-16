@@ -26,6 +26,10 @@ contextBridge.exposeInMainWorld('updates', {
     }
 });
 
+contextBridge.exposeInMainWorld('discord', {
+    setEnabled: enabled => call('discord:set-enabled', enabled)
+});
+
 contextBridge.exposeInMainWorld('settings', {
     get: () => call('settings:get'),
     set: patch => call('settings:set', patch)

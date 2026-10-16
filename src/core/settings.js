@@ -9,8 +9,8 @@ const fs = require('fs');
 const path = require('path');
 const { HubError } = require('./errors');
 
-const DEFAULTS = Object.freeze({ autoCheckUpdates: true });
-const SCHEMA = Object.freeze({ autoCheckUpdates: 'boolean' });
+const DEFAULTS = Object.freeze({ autoCheckUpdates: true, discordRichPresence: false });
+const SCHEMA = Object.freeze({ autoCheckUpdates: 'boolean', discordRichPresence: 'boolean' });
 
 function createSettings({ dir, fileName = 'settings.json' }) {
     const file = path.join(dir, fileName);

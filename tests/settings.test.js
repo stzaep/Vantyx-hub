@@ -11,11 +11,12 @@ test('settings default to auto-check on and survive a restart (new instance, sam
     try {
         const dir = path.join(root, 'Vantyx Hub');
         const a = createSettings({ dir });
-        assert.deepStrictEqual(a.get(), { autoCheckUpdates: true });
-        a.set({ autoCheckUpdates: false });
+        assert.deepStrictEqual(a.get(), { autoCheckUpdates: true, discordRichPresence: false });
+        a.set({ autoCheckUpdates: false, discordRichPresence: true });
         // simulates the app after an update: a brand-new process reads the same file
         const b = createSettings({ dir });
         assert.strictEqual(b.get().autoCheckUpdates, false);
+        assert.strictEqual(b.get().discordRichPresence, true);
         assert.ok(!fs.existsSync(b.file + '.tmp'), 'no temp file left behind');
     } finally { rmrf(root); }
 });
@@ -37,7 +38,7 @@ test('corrupt settings file falls back to defaults; unknown keys from newer vers
     try {
         const file = path.join(root, 'settings.json');
         fs.writeFileSync(file, '{not json');
-        assert.deepStrictEqual(createSettings({ dir: root }).get(), { autoCheckUpdates: true });
+        assert.deepStrictEqual(createSettings({ dir: root }).get(), { autoCheckUpdates: true, discordRichPresence: false });
 
         fs.writeFileSync(file, JSON.stringify({ autoCheckUpdates: false, futureOption: 'keep-me', autoCheckUpdates2: 1 }));
         const s = createSettings({ dir: root });

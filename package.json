@@ -1,7 +1,7 @@
 {
   "name": "vantyx-hub",
   "productName": "Vantyx Hub",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Vantyx Hub - install and manage Vantyx tools for Adobe After Effects",
   "author": "Vantyx",
   "license": "UNLICENSED",
@@ -20,6 +20,7 @@
     "release": "node scripts/check-release.js && electron-builder --win nsis --publish always"
   },
   "dependencies": {
+    "@xhayper/discord-rpc": "^1.5.1",
     "electron-updater": "^6.3.9"
   },
   "devDependencies": {

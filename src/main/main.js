@@ -25,6 +25,7 @@ const {
 
 const { registerIpc } = require('./ipc');
 const { registerUpdatesIpc } = require('./updates-ipc');
+const { createDiscordPresence } = require('./discord-presence');
 
 const AUTO_CHECK_DELAY_MS = 5000;
 
@@ -103,7 +104,7 @@ if (!app.requestSingleInstanceLock()) {
         win.focus();
     }
 
-    // Crear el icono y el menú de la bandeja del sistema.
+    // Crear el icono y el menÃº de la bandeja del sistema.
     function createTray() {
         tray = new Tray(iconPath);
         tray.setToolTip('Vantyx Hub');
@@ -132,7 +133,7 @@ if (!app.requestSingleInstanceLock()) {
             showWindow();
         });
 
-        // Un doble clic también abre la ventana.
+        // Un doble clic tambiÃ©n abre la ventana.
         tray.on('double-click', () => {
             showWindow();
         });
@@ -179,7 +180,7 @@ if (!app.requestSingleInstanceLock()) {
             path.join(__dirname, '..', 'renderer', 'index.html')
         );
 
-        // La X oculta la ventana, pero mantiene la aplicación activa.
+        // La X oculta la ventana, pero mantiene la aplicaciÃ³n activa.
         win.on('close', event => {
             if (!isQuitting) {
                 event.preventDefault();
@@ -228,18 +229,26 @@ if (!app.requestSingleInstanceLock()) {
             isBusy: ipc.isBusy
         });
 
+        const discordPresence = createDiscordPresence();
+
         registerUpdatesIpc({
             ipcMain,
             updates,
             settings,
-            getWindow: () => win
+            getWindow: () => win,
+            discordPresence
         });
+
+        // Restaurar la preferencia de Discord guardada.
+        if (settings.get().discordRichPresence) {
+            discordPresence.setEnabled(true).catch(() => {});
+        }
 
         // Crear el icono antes de abrir la ventana.
         createTray();
         createWindow();
 
-        // Comprobación automática de actualizaciones.
+        // ComprobaciÃ³n automÃ¡tica de actualizaciones.
         if (
             updates.getState().status !== 'disabled' &&
             settings.get().autoCheckUpdates
@@ -250,18 +259,19 @@ if (!app.requestSingleInstanceLock()) {
         }
     });
 
-    // Permitir que la aplicación se cierre cuando el usuario lo solicite.
+    // Permitir que la aplicaciÃ³n se cierre cuando el usuario lo solicite.
     app.on('before-quit', () => {
         isQuitting = true;
     });
 
-    // No cerrar la aplicación cuando se oculta o cierra la ventana.
+    // No cerrar la aplicaciÃ³n cuando se oculta o cierra la ventana.
     app.on('window-all-closed', () => {
         // Vantyx Hub permanece activo en la bandeja.
     });
 
-    // Liberar el icono al cerrar completamente la aplicación.
+    // Liberar el icono al cerrar completamente la aplicaciÃ³n.
     app.on('will-quit', () => {
+        if (discordPresence) discordPresence.stop().catch(() => {});
         if (tray) {
             tray.destroy();
             tray = null;

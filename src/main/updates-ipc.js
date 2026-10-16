@@ -14,7 +14,7 @@ function wrap(fn) {
     };
 }
 
-function registerUpdatesIpc({ ipcMain, updates, settings, getWindow }) {
+function registerUpdatesIpc({ ipcMain, updates, settings, getWindow, discordPresence }) {
     // Only the Hub's own window may call these channels.
     function trusted(event) {
         const win = getWindow && getWindow();
@@ -30,6 +30,15 @@ function registerUpdatesIpc({ ipcMain, updates, settings, getWindow }) {
         return updates.installAndRestart({ confirmed: true });
     });
     handle('settings:get', () => settings.get());
+    handle('discord:set-enabled', async enabled => {
+        if (typeof enabled !== 'boolean') {
+            throw new HubError('BAD_REQUEST', 'Invalid Discord setting');
+        }
+        if (!discordPresence) {
+            throw new HubError('DISCORD_UNAVAILABLE', 'Discord Rich Presence is unavailable');
+        }
+        return discordPresence.setEnabled(enabled);
+    });
     handle('settings:set', patch => {
         if (!patch || typeof patch !== 'object' || Array.isArray(patch)) throw new HubError('BAD_REQUEST', 'Invalid settings');
         const clean = {};

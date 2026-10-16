@@ -149,6 +149,87 @@
         try { return new Date(ts).toLocaleString(VTX.lang === 'es' ? 'es-ES' : 'en-GB'); } catch (e) { return ''; }
     }
 
+    // ------------------------------------------------------ Discord Rich Presence
+    function renderDiscordSettings() {
+        var box = byId('discord-settings');
+        if (!box) return;
+
+        box.textContent = '';
+
+        if (!state.settings || !window.discord || !window.settings) {
+            box.hidden = true;
+            return;
+        }
+
+        box.hidden = false;
+
+        var head = el('div', 'update-head');
+        head.appendChild(el('span', 'update-title', 'Discord Rich Presence'));
+        box.appendChild(head);
+
+        box.appendChild(el('div', 'tool-detail',
+            'Show Vantyx Hub activity on your Discord profile.'));
+
+        var row = el('div', 'update-actions');
+        var lab = el('label', 'check-row');
+        var cb = el('input');
+
+        cb.type = 'checkbox';
+        cb.checked = !!state.settings.discordRichPresence;
+        cb.addEventListener('change', function () {
+            setDiscordEnabled(cb);
+        });
+
+        lab.appendChild(cb);
+        lab.appendChild(el('span', null, 'Enable Discord Rich Presence'));
+        row.appendChild(lab);
+        box.appendChild(row);
+    }
+
+    async function setDiscordEnabled(cb) {
+        var previous = !!state.settings.discordRichPresence;
+        var wanted = !!cb.checked;
+
+        cb.disabled = true;
+
+        try {
+            var saved = await window.settings.set({
+                discordRichPresence: wanted
+            });
+
+            if (!saved.ok) {
+                cb.checked = previous;
+                fail(saved.error);
+                return;
+            }
+
+            state.settings = saved.data;
+
+            var result = await window.discord.setEnabled(wanted);
+
+            if (!result.ok) {
+                await window.settings.set({
+                    discordRichPresence: previous
+                });
+                state.settings.discordRichPresence = previous;
+                cb.checked = previous;
+                fail(result.error);
+                return;
+            }
+        } catch (error) {
+            try {
+                await window.settings.set({
+                    discordRichPresence: previous
+                });
+            } catch (_) {}
+
+            state.settings.discordRichPresence = previous;
+            cb.checked = previous;
+            fail(error);
+        } finally {
+            cb.disabled = false;
+        }
+    }
     function renderUpdates() {
         var box = byId('updates'); if (!box) return;
         var st = state.update;
@@ -173,7 +254,7 @@
 
         if (view.notes && info) {
             var notes = el('div', 'update-notes');
-            notes.appendChild(el('div', 'update-notes-title', t('upd.newversion', { v: info.version }) + ' · ' + t('upd.notes')));
+            notes.appendChild(el('div', 'update-notes-title', t('upd.newversion', { v: info.version }) + ' Â· ' + t('upd.notes')));
             notes.appendChild(el('div', 'update-notes-body', info.notes || t('upd.notes.none')));
             box.appendChild(notes);
         }
@@ -185,9 +266,11 @@
         }
 
         var row = el('div', 'update-actions');
-        view.buttons.forEach(function (a) {
+        var actions = view.buttons.slice();
+        if (st.status === 'disabled') actions = ['check'];
+        actions.forEach(function (a) {
             var b = el('button', 'pill-btn' + (a === 'check' ? '' : ' primary'), t('btn.' + a));
-            if (a === 'check' && st.status === 'checking') b.disabled = true;
+            if (a === 'check' && (st.status === 'checking' || st.status === 'disabled')) b.disabled = true;
             b.addEventListener('click', function () { updAction(a); });
             row.appendChild(b);
         });
@@ -247,8 +330,16 @@
     }
 
     async function initUpdates() {
+        if (window.settings) {
+            try {
+                var s = await window.settings.get();
+                if (s.ok) state.settings = s.data;
+            } catch (error) {
+                console.error('Could not load settings:', error);
+            }
+        }
+        renderDiscordSettings();
         if (!window.updates) return;
-        if (window.settings) { var s = await window.settings.get(); if (s.ok) state.settings = s.data; }
         var u = await window.updates.getState();
         if (u.ok) acceptUpdate(u.data);
         window.updates.onState(function (st) { if (acceptUpdate(st)) renderUpdates(); });
@@ -259,6 +350,28 @@
     byId('subtitle').textContent = t('app.subtitle');
     byId('libTitle').textContent = t('lib.title');
     byId('btnRefresh').addEventListener('click', function () { refresh(); });
+    var settingsButton = byId('btnSettings');
+    var settingsOverlay = byId('settings-overlay');
+    var closeSettingsButton = byId('btnCloseSettings');
+
+    if (settingsButton && settingsOverlay) {
+        settingsButton.addEventListener('click', function () {
+            renderDiscordSettings();
+            settingsOverlay.hidden = false;
+        });
+    }
+
+    if (closeSettingsButton && settingsOverlay) {
+        closeSettingsButton.addEventListener('click', function () {
+            settingsOverlay.hidden = true;
+        });
+    }
+
+    if (settingsOverlay && typeof settingsOverlay.addEventListener === 'function') {
+        settingsOverlay.addEventListener('click', function (event) {
+            if (event.target === settingsOverlay) settingsOverlay.hidden = true;
+        });
+    }
     refresh();
     initUpdates();
 })();

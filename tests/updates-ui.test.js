@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 // Runs the real renderer scripts against a fake DOM, wired to the real update
 // service and settings (with a fake electron-updater underneath).
 const test = require('node:test');
@@ -188,7 +188,8 @@ test('disabled builds explain why and offer no update buttons', async () => {
     try {
         const ui = await boot(root, 'en-GB', { disabledReason: 'portable' });
         assert.match(ui.text(), /portable version cannot update itself/);
-        assert.deepStrictEqual(ui.buttons().map(b => b.textContent), []);
+        assert.deepStrictEqual(ui.buttons().map(b => b.textContent), ['Check for updates']);
+        assert.strictEqual(ui.buttons('Check for updates')[0].disabled, true);
         assert.strictEqual(ui.els.updates.findAll(c => c.tagName === 'INPUT').length, 0);
     } finally { rmrf(root); }
 });
