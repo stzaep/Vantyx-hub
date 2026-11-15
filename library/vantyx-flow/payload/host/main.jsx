@@ -681,9 +681,28 @@ function readCurveFromSelectedKeyframes() {
         var dims = easeDimensionsForProperty(prop);
         var valA = prop.keyValue(keyA);
         var valB = prop.keyValue(keyB);
-        var vA0 = (dims === 1) ? valA : valA[0];
-        var vB0 = (dims === 1) ? valB : valB[0];
-        var delta = vB0 - vA0;
+
+        // Position sin Separate Dimensions es SPATIAL: su velocidad en AE
+        // se mide a lo largo del movimiento completo (una sola
+        // KeyframeEase), así que el "delta" de referencia es la distancia
+        // real entre los dos keyframes, igual que hace Apply. Para el
+        // resto de propiedades se mantiene la primera dimensión.
+        var isSpatial = (prop.propertyValueType === PropertyValueType.TwoD_SPATIAL ||
+                         prop.propertyValueType === PropertyValueType.ThreeD_SPATIAL);
+        var delta;
+        if (isSpatial) {
+            var spDims = (prop.propertyValueType === PropertyValueType.ThreeD_SPATIAL) ? 3 : 2;
+            var distSq = 0;
+            for (var sd = 0; sd < spDims; sd++) {
+                var dd = valB[sd] - valA[sd];
+                distSq += dd * dd;
+            }
+            delta = Math.sqrt(distSq);
+        } else {
+            var vA0 = (dims === 1) ? valA : valA[0];
+            var vB0 = (dims === 1) ? valB : valB[0];
+            delta = vB0 - vA0;
+        }
         if (delta === 0) delta = 0.0001;
 
         // keyOutTemporalEase / keyInTemporalEase devuelven un array de
