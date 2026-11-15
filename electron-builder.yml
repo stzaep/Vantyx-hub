@@ -12,6 +12,8 @@ extraResources:
     to: library
   - from: build/icon.ico
     to: icon.ico
+  - from: scripts/elevated-file-ops.ps1
+    to: elevated-file-ops.ps1
 win:
   icon: build/icon.ico
   target:

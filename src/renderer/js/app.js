@@ -49,6 +49,11 @@
         if (target.missing && target.missing.length) c.appendChild(el('div', 'tool-detail', t('tool.missing', { n: target.missing.length, list: logic.shortList(target.missing) })));
         if (target.modified && target.modified.length) c.appendChild(el('div', 'tool-detail', t('tool.modified', { n: target.modified.length, list: logic.shortList(target.modified) })));
         if (target.error) c.appendChild(el('div', 'tool-detail', VTX.errorText(target.error)));
+        if (target.detectedVersions && target.detectedVersions.length) {
+            var versions = el('div', 'tool-detail');
+            versions.textContent = 'After Effects: ' + target.detectedVersions.map(function (v) { return v.label + ' (' + v.state + ')'; }).join(', ');
+            c.appendChild(versions);
+        }
         if (target.installPath && target.state !== 'not-installed') c.appendChild(el('div', 'tool-path', target.installPath));
 
         var row = el('div', 'tool-actions');

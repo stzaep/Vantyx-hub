@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "id": "vtx-console",
+  "name": "VTX Console",
+  "version": "1.0.0",
+  "kind": "aex",
+  "description": "Native After Effects plugin installed in the Vantyx Plug-ins folder for every detected version.",
+  "author": "Vantyx",
+  "payload": "payload",
+  "installDir": "Vantyx",
+  "userData": [],
+  "requires": { "ae": ">=2018" }
+}

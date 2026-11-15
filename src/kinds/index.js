@@ -2,7 +2,7 @@
 // Registry of tool kinds. To support a new kind (e.g. ScriptUI panels) add a
 // module with the same interface as cep.js and register it here.
 const { HubError } = require('../core/errors');
-const kinds = { cep: require('./cep') };
+const kinds = { cep: require('./cep'), aex: require('./aex') };
 
 function get(id) {
     const k = kinds[id];

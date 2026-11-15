@@ -20,6 +20,8 @@ function detectAfterEffects(env) {
             found.push({
                 name, label: m[1], dir, exe,
                 scriptsDir: scripts,
+                plugInsDir: path.join(dir, 'Support Files', 'Plug-ins'),
+                vantyxPlugInsDir: path.join(dir, 'Support Files', 'Plug-ins', 'Vantyx'),
                 scriptUiPanelsDir: path.join(scripts, 'ScriptUI Panels'),
                 beta: /beta/i.test(m[1])
             });

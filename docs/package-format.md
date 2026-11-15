@@ -17,7 +17,7 @@ payload/             <- archivos que se instalan (el nombre se indica en "payloa
 | `id` | sí | Identificador único: minúsculas, números y guiones (`vantyx-organizer`). |
 | `name` | sí | Nombre visible. |
 | `version` | sí | `1.2.3` (admite `1.2.3-beta`). Sube la versión para que el Hub ofrezca "Actualizar". |
-| `kind` | sí | Tipo de herramienta. Ahora: `cep`. |
+| `kind` | sí | Tipo de herramienta: `cep` o `aex` (plugin nativo de After Effects para Windows). |
 | `description`, `author` | no | Texto informativo. |
 | `payload` | no | Carpeta del paquete con los archivos (por defecto `payload`). |
 | `installDir` | no | Nombre de la carpeta final dentro de `extensions` (por defecto, el nombre de `payload`). |
@@ -38,3 +38,7 @@ payload/             <- archivos que se instalan (el nombre se indica en "payloa
 3. Añadir tests en `tests/`.
 
 El instalador, el desinstalador, los recibos y la interfaz no cambian.
+
+## Plugins nativos AEX
+
+Los paquetes `kind: aex` deben contener exactamente un archivo `VTX-Console.aex` en su payload. Vantyx Hub detecta todas las instalaciones de After Effects que contienen `Support Files/AfterFX.exe` e instala el archivo en `Support Files/Plug-ins/Vantyx/VTX-Console.aex`. La escritura en `Program Files` solicita elevación UAC una vez para toda la operación. Los recibos se guardan por versión detectada y la desinstalación solo elimina el archivo si su hash coincide con el instalado por el Hub.

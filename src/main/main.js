@@ -217,7 +217,10 @@ if (!app.requestSingleInstanceLock()) {
             libraryDirs: [
                 bundled,
                 path.join(dataDir, 'library')
-            ]
+            ],
+            elevatedHelperPath: app.isPackaged
+                ? path.join(process.resourcesPath, 'elevated-file-ops.ps1')
+                : path.join(__dirname, '..', '..', 'scripts', 'elevated-file-ops.ps1')
         });
 
         const ipc = registerIpc({
